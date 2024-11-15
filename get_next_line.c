@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-// Custom implementation of strdup
+// helper function fo allocation strdup
 char	*my_strdup(char *src)
 {
 	char	*dup;
@@ -112,23 +112,23 @@ char	*get_next_line(int fd)
 	buffer = update_buffer(buffer);
 	return (line);
 }
-// #include <stdio.h>
-// #include <fcntl.h>
-// int main()
-// {
-//     char *s;
-//     int fd = open("text.txt", O_RDONLY);
-//     if (fd == -1)
-//     {
-//         printf("Error opening file\n");
-//         return 1;
-//     }
+#include <stdio.h>
+#include <fcntl.h>
+int main()
+{
+    char *s;
+    int fd = open("text.txt", O_RDONLY);
+    if (fd == -1)
+    {
+        printf("Error opening file\n");
+        return 1;
+    }
 
-//    while( (s= get_next_line(fd)))
-//    {
-//     printf("%s", get_next_line(0));
-//    }
+   while( (s= get_next_line(fd)))
+   {
+    printf("%s", get_next_line(0));
+   }
 
-//     close(fd);
-//     return 0;
-// }
+    close(fd);
+    return 0;
+}
