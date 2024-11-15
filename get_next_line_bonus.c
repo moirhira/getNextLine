@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moirhira <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 18:57:04 by moirhira          #+#    #+#             */
-/*   Updated: 2024/11/13 22:04:02 by moirhira         ###   ########.fr       */
+/*   Created: 2024/11/14 14:22:49 by moirhira          #+#    #+#             */
+/*   Updated: 2024/11/14 14:22:51 by moirhira         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 // Custom implementation of strdup
 char	*my_strdup(char *src)
@@ -98,18 +98,22 @@ char	*readfromfd(int fd, char *buffer)
 	return (buffer);
 }
 
-//main function
+//main function handle multiple fds
 char	*get_next_line(int fd)
 {
-	static char		*buffer;
+	static char		*buffers[1024];
 	char			*line;
 
-	if (!find_newline(buffer, '\n'))
+	if (!buffers[fd])
 	{
-		buffer = readfromfd(fd, buffer);
+		buffers[fd] = NULL;
 	}
-	line = separate_line(buffer);
-	buffer = update_buffer(buffer);
+	if (!find_newline(buffers[fd], '\n'))
+	{
+		buffers[fd] = readfromfd(fd, buffers[fd]);
+	}
+	line = separate_line(buffers[fd]);
+	buffers[fd] = update_buffer(buffers[fd]);
 	return (line);
 }
 // #include <stdio.h>
@@ -117,17 +121,22 @@ char	*get_next_line(int fd)
 // int main()
 // {
 //     char *s;
-//     int fd = open("text.txt", O_RDONLY);
-//     if (fd == -1)
+//     int fd = open("text.txt", O_RDONLY | O_CREAT);
+// 	int fd1 = open("text1.txt", O_RDONLY | O_CREAT);
+// 	int fd2 = open("text2.txt", O_RDONLY | O_CREAT);
+//     if (fd == -1 || fd1 == -1|| fd2 == -1)
 //     {
 //         printf("Error opening file\n");
 //         return 1;
 //     }
 
-//    while( (s= get_next_line(fd)))
-//    {
-//     printf("%s", get_next_line(0));
-//    }
+// //    while( (s= get_next_line(fd)))
+// //    {
+//     printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd1));
+// 	printf("%s", get_next_line(fd2));
+// 	printf("%s", get_next_line(fd));
+// //    }
 
 //     close(fd);
 //     return 0;
